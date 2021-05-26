@@ -41,11 +41,19 @@ module.exports = function(RED) {
                     node.error("Upload failed: " + error.code);
                     node.status({fill: "red", shape: "ring", text: "upload failed"});
                   }, function() {
-                    var downloadURL = uploadTask.snapshot.downloadURL;
-                    node.log("Download url:" + downloadURL);
-                    node.status({fill:"green", shape:"dot", text:"connected"});
-                    msg.downloadUrl = downloadURL;
-                    node.send(msg);
+                    uploadTask.snapshot.ref.getDownloadURL()
+                      .then((downloadURL) => {
+
+                        node.log("Download url:" + downloadURL);
+                        node.status({fill:"green", shape:"dot", text:"connected"});
+                        msg.downloadUrl = downloadURL;
+                        node.send(msg);
+                      })
+                      .catch((error) => {
+                        // Uh-oh, an error occurred!
+                        node.error('Uh-oh, an error occurred, while retrieving the download url!', error);
+                        node.status({fill: "red", shape: "ring", text: "download url failed"});
+                      });;
                   });
               }
             } else {
