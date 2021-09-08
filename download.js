@@ -24,12 +24,12 @@ module.exports = function(RED) {
                 node.status({fill:"green", shape:"dot", text:"connected"});
                 node.send(msg);
               }).catch(function(error) {
-                node.error("Download failed: " + error.code);
                 node.status({fill: "red", shape: "ring", text: "download failed"});
+                node.error("Download failed: " + error.code, error);
               });
             } else {
-              node.error("Config node not filled with Firebase account data")
               node.status({fill:"red", shape:"ring", text:"disconnected"});
+              node.error("Config node not filled with Firebase account data", msg);
             }
         });
     }

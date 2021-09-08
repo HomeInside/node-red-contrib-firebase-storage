@@ -38,27 +38,26 @@ module.exports = function(RED) {
                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                     node.log("Upload is " + progress + '% done');
                   }, function(error) {
-                    node.error("Upload failed: " + error.code);
                     node.status({fill: "red", shape: "ring", text: "upload failed"});
+                    node.error("Upload failed: " + error.code, msg);
                   }, function() {
                     uploadTask.snapshot.ref.getDownloadURL()
                       .then((downloadURL) => {
-
                         node.log("Download url:" + downloadURL);
-                        node.status({fill:"green", shape:"dot", text:"connected"});
                         msg.downloadUrl = downloadURL;
+                        node.status({fill:"green", shape:"dot", text:"connected"});
                         node.send(msg);
                       })
                       .catch((error) => {
                         // Uh-oh, an error occurred!
-                        node.error('Uh-oh, an error occurred, while retrieving the download url!', error);
                         node.status({fill: "red", shape: "ring", text: "download url failed"});
+                        node.error('Uh-oh, an error occurred, while retrieving the download url!', error);
                       });;
                   });
               }
             } else {
-              node.error("Config node not filled with Firebase account data")
               node.status({fill:"red", shape:"ring", text:"disconnected"});
+              node.error("Config node not filled with Firebase account data", msg);
             }
         });
 
