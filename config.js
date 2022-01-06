@@ -1,5 +1,4 @@
-module.exports = function(RED) {
-
+module.exports = function (RED) {
   function ConfigFirebaseNode(config) {
     RED.nodes.createNode(this, config);
     this.apikey = config.apikey;
@@ -11,7 +10,7 @@ module.exports = function(RED) {
 
     // initialize firebase connection
     var firebase = require("firebase");
-    var storage = require("firebase/storage")
+    var storage = require("firebase/storage");
     var configuration = {
       apiKey: node.apikey,
       authDomain: node.authdomain,
@@ -27,4 +26,4 @@ module.exports = function(RED) {
   }
 
   RED.nodes.registerType("config-firebase", ConfigFirebaseNode);
-}
+};
